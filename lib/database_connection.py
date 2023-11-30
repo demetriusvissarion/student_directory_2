@@ -1,5 +1,5 @@
-import psycopg
-from psycopg.rows import dict_row
+import psycopg2
+from psycopg2 import extras
 import os
 
 # This class helps us interact with the database.
@@ -8,16 +8,16 @@ import os
 # If the below seems too complex right now, that's OK.
 # That's why we have provided it!
 class DatabaseConnection:
-    DATABASE_NAME = "DEFAULT_MAKERS_PROJECT" # <-- CHANGE THIS!
+    DATABASE_NAME = "student_directory_2" # <-- CHANGE THIS!
 
     # This method connects to PostgreSQL using the psycopg library. We connect
     # to localhost and select the database name given in argument.
     def connect(self):
         try:
-            self.connection = psycopg.connect(
-                f"postgresql://localhost/{self.DATABASE_NAME}",
-                row_factory=dict_row)
-        except psycopg.OperationalError:
+            self.connection = psycopg2.connect(
+                f"postgresql://localhost/{self.DATABASE_NAME}", cursor_factory=extras.DictCursor)
+            # self.connection.cursor_factory = psycopg2.extras.DictCursor
+        except psycopg2.OperationalError:
             raise Exception(f"Couldn't connect to the database {self.DATABASE_NAME}! " \
                     f"Did you create it using `createdb {self.DATABASE_NAME}`?")
 

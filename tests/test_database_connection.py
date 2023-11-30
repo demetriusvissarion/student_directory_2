@@ -15,7 +15,4 @@ def test_database_connection(db_connection):
     result = db_connection.execute("SELECT * FROM test_table")
 
     # Assert that the results are what we expect
-    assert result == [
-        {"id": 1, "name": "first_record"},
-        {"id": 2, "name": "second_record"}
-    ]
+    assert result == [[1, 'first_record'], [2, 'second_record']]
