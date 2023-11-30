@@ -2,13 +2,13 @@ from datetime import date
 from lib.cohort import Cohort
 
 """
-Cohort constructs with an id, name and starting_date
+Cohort constructs with an id, cohort_name and starting_date
 """
 def test_cohort_constructs():
     today = date.today()
     cohort = Cohort(1, "Test Cohort", today)
     assert cohort.id == 1
-    assert cohort.name == "Test Cohort"
+    assert cohort.cohort_name == "Test Cohort"
     assert cohort.starting_date == today
 
 """

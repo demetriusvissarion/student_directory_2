@@ -1,5 +1,6 @@
 from lib.cohort_repository import CohortRepository
 from lib.cohort import Cohort
+from lib.student import Student
 
 """
 When we call CohortRepository#all
@@ -10,8 +11,6 @@ def test_get_all_records(db_connection): # See conftest.py to learn what `db_con
     repository = CohortRepository(db_connection) # Create a new CohortRepository
 
     cohorts = repository.all() # Get all cohorts
-    print('cohorts')
-
     # Assert on the results
     assert str(cohorts) == '[Cohort(1, Cohort 1, 2023-11-28), Cohort(2, Cohort 2, 2023-11-29), Cohort(3, Cohort 3, 2023-11-30)]'
 
@@ -20,8 +19,13 @@ def test_find_with_students(db_connection):
     db_connection.seed("seeds/student_directory_2.sql")
     repository = CohortRepository(db_connection)
 
-    cohort_of_the_student = repository.find_with_students(1)
-    assert str(cohort_of_the_student) == 'Cohort(1, Cohort 1, 2023-11-28)'
+    cohort = repository.find_with_students(1) # find cohort 1 and all students
+    assert str(cohort) == 'Cohort(1, Cohort 1, 2023-11-28)'
+    # assert cohort == Cohort(1, 'Cohort 1', '2023-11-28', [
+    #     Student(1, 'Mike', 1),
+    #     Student(2, 'Joe', 1),
+    #     Student(3, 'Tom', 1),
+    # ])
 
 # """
 # When we call CohortRepository#find
