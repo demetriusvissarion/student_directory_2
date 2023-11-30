@@ -2,13 +2,13 @@ from lib.cohort import Cohort
 from lib.student import Student
 
 class CohortRepository:
-
     # We initialise with a database connection
     def __init__(self, connection):
         self._connection = connection
 
     # Retrieve all cohorts
     def all(self):
+        print('reached all************************')
         rows = self._connection.execute('SELECT * from cohorts')
         cohorts = []
         for row in rows:
@@ -26,16 +26,16 @@ class CohortRepository:
     # Find a single student => change the query to only fetch specific data
     def find_with_students(self, student_id):
         rows = self._connection.execute(
-            "SELECT students.id as student_id, students.name, students.cohort, cohorts.id AS cohort_id, cohorts.title, cohorts.release_year " \
-            "FROM students JOIN cohorts ON students.id = cohorts.student_id " \
-            "WHERE students.id = %s", [student_id])
-        cohorts = []
+            "SELECT students.id as student_id, students.name, students.cohort_id, cohorts.id AS cohort_id, cohorts.name, cohorts.starting_date " \
+            "FROM students JOIN cohorts ON students.cohort_id = cohorts.id " \
+            "WHERE students.cohort_id = %s", [student_id])
+        students = []
         for row in rows:
-            cohort = Cohort(row["cohort_id"], row["title"], row["release_year"], row["artist_id"])
-            cohorts.append(cohort)
+            student = Student(row["student_id"], row["name"], row["cohort_id"])
+            students.append(student)
 
         # Each row has the same id, name, and genre, so we just use the first
-        return Student(rows[0]["artist_id"], rows[0]["name"], rows[0]["genre"], cohorts)
+        return Cohort(rows[0]["cohort_id"], rows[0]["name"], rows[0]["starting_date"], students)
 
     # Create a new cohort
     # Do you want to get its id back? Look into RETURNING id;
