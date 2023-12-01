@@ -22,19 +22,20 @@ class CohortRepository:
         row = rows[0]
         return Cohort(row["id"], row["cohort_name"], row["starting_date"])
     
-    # Find a single student => change the query to only fetch specific data
+    # Find a single cohort with students
     def find_with_students(self, cohort_id):
         rows = self._connection.execute(
-            "SELECT * FROM cohorts JOIN students ON cohorts.id = students.cohort_id " \
+            "SELECT cohorts.id as cohort_id, cohorts.cohort_name, cohorts.starting_date, " \
+            "students.id as student_id, students.student_name " \
+            "FROM cohorts JOIN students ON cohorts.id = students.cohort_id " \
             "WHERE cohorts.id = %s", [cohort_id])
         students = []
         for row in rows:
-            student = Student(row["id"], row["student_name"], row["cohort_id"])
+            student = Student(row["student_id"], row["student_name"], row["cohort_id"])
             students.append(student)
 
         # Each row has the same id, cohort_name, and starting_date, so we just use the first
-        # print('Result: ', Cohort(rows[0]["id"], rows[0]["cohort_name"], rows[0]["starting_date"], students))
-        return Cohort(rows[0]["id"], rows[0]["cohort_name"], rows[0]["starting_date"], students)
+        return Cohort(rows[0]["cohort_id"], rows[0]["cohort_name"], rows[0]["starting_date"], students)
 
     # # Create a new cohort
     # # Do you want to get its id back? Look into RETURNING id;
@@ -57,3 +58,7 @@ class CohortRepository:
 # id: SERIAL
 # student_name: text
 # cohort_id: text
+
+# AssertionError:
+# Cohort(1, Cohort 1, 2023-11-28, [Student(1, Mike, 1), Student(2, Joe, 1), Student(3, Tom, 1)]) == 
+# Cohort(1, Cohort 1, 2023-11-28, [Student(1, Mike, 1), Student(2, Joe, 1), Student(3, Tom, 1)])

@@ -20,12 +20,13 @@ def test_find_with_students(db_connection):
     repository = CohortRepository(db_connection)
 
     cohort = repository.find_with_students(1) # find cohort 1 and all students
-    assert str(cohort) == 'Cohort(1, Cohort 1, 2023-11-28)'
-    # assert cohort == Cohort(1, 'Cohort 1', '2023-11-28', [
-    #     Student(1, 'Mike', 1),
-    #     Student(2, 'Joe', 1),
-    #     Student(3, 'Tom', 1),
-    # ])
+    # assert str(cohort) == 'Cohort(1, Cohort 1, 2023-11-28)'
+    # assert str(cohort) == 'Cohort(1, Cohort 1, 2023-11-28, [Student(1, Mike, 1), Student(2, Joe, 1), Student(3, Tom, 1)])'
+    assert cohort == Cohort(1, 'Cohort 1', '2023-11-28', [
+        Student(1, 'Mike', 1),
+        Student(2, 'Joe', 1),
+        Student(3, 'Tom', 1),
+    ])
 
 # """
 # When we call CohortRepository#find

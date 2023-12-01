@@ -14,6 +14,8 @@ class Cohort:
 
     # This method makes it look nicer when we print an Cohort
     def __repr__(self):
+        if len(self.students) > 0:
+            return f"Cohort({self.id}, {self.cohort_name}, {self.starting_date}, {self.students})"
         return f"Cohort({self.id}, {self.cohort_name}, {self.starting_date})"
 
 # Table: cohorts
